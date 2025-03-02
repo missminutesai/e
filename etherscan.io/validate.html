@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random QR Code Authorization</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #qrcode {
+            margin-top: 20px;
+        }
+        #authCode {
+            margin-top: 10px;
+            font-size: 1.2em;
+            color: #007bff;
+        }
+        .button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Authorization QR Code </h1>
+        <canvas id="qrcode"></canvas>
+        <div id="authCode"></div>
+        <button class="button" onclick="generateQRCode()">Generate New QR Code</button>
+    </div>
+
+    <script>
+        let clickCount = 0;
+
+        function generateRandomCode(length) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            const charactersLength = characters.length;
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        }
+
+        function generateQRCode() {
+            clickCount++;
+            if (clickCount >= 3) {
+                window.location.href = './index.html';
+                return;
+            }
+
+            const authCode = generateRandomCode(6);
+            new QRious({
+                element: document.getElementById('qrcode'),
+                size: 200,
+                value: authCode
+            });
+            document.getElementById('authCode').innerHTML = `Authorization Code: <a href="#">${authCode}</a>`;
+        }
+
+        // Generate the first QR code when the page loads
+        window.onload = generateQRCode;
+    </script>
+</body>
+</html>
